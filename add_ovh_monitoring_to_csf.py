@@ -4,6 +4,8 @@
 import requests, os
 from bs4 import BeautifulSoup as bs4
 
+import subprocess
+
 # requerimientos:
 # pip3 install bs4
 
@@ -50,6 +52,17 @@ if os.path.isfile(ruta_csf):
 		    f.write(ip+" # OVH Monitoring\n")
 		f.close()
 		print("Ips de monitorización de OVH añadidas correctamente")
+
+		#Procedemos a reiniciar el csf
+		print("Reiniciando csf ...")
+		bashCommand = "/usr/sbin/csf -ra"
+		process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+		output, error = process.communicate()
+		if error==None:
+			print("csf reiniciado")
+		else:
+			print("Error reiniciando el CSF: "+str(error))
+
 	else:
 		print("No hay ninguna ip que añadir al CSF")
 else:
